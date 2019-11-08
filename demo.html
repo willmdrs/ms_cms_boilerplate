@@ -1,0 +1,142 @@
+<!-- VERSÃO: EXEMPLO 1.0.0 -->
+<!-- NÃO ALTERE ABAIXO -->
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width">
+    <title>Teste de layout - manageSense</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/quasar@^1.1.0/dist/quasar.min.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div id="q-app">
+      <q-layout view="lHh Lpr fff">
+        <q-page-container>
+          <q-page>
+            <demo :_ms="{ configuracoes: configuracoes } ">
+              <template #site.logotipo="props">
+                <img src="logotipo.png" alt="logotipo.png" :class="props.classes"/>
+              </template>
+              <template #pagina.titulo>
+                <h1 v-if="!exibirTitulo()">{{ pagina.titulo }}</h1>
+              </template>
+              <template #pagina.conteudo>
+                <component v-bind:is="conteudoProcessado"></component>
+              </template>
+              <template #menu="props">
+                <div v-for="menus in menus" :key="menus.nome">
+                  <div v-if="menus.nome === props.nome">
+                    <div v-if="props.tipo === 'botoes'">
+                      <q-btn flat v-for="menu in menus.menu" :key="menu.titulo" :color="props.cor" :label="menu.titulo" :class="{ 'on-right': (props.orientacao === 'horizontal'), 'full-width': (props.orientacao === 'vertical') }"></q-btn>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </demo>
+          </q-page>
+        </q-page-container>
+      </q-layout>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/quasar@^1.1.0/dist/quasar.ie.polyfills.umd.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quasar@^1.1.0/dist/quasar.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quasar@^1.1.0/dist/lang/pt-br.umd.min.js"></script>
+    <script src="//stylus-lang.com/try/stylus.min.js"></script>
+    <script src="https://unpkg.com/http-vue-loader"></script>
+    <script>
+      Quasar.lang.set(Quasar.lang.ptBr)
+      httpVueLoader.langProcessor.stylus = function(stylusText) {
+        return new Promise(function(resolve, reject) {
+          stylus.render(stylusText.trim(), {}, function(err, css) {
+            if (err) reject(err)
+            resolve(css)
+          })
+        })
+      }
+      new Vue({
+        el: '#q-app',
+        components: {
+          'demo': httpVueLoader('demo.vue')
+        },
+        /* NÃO ALTERE ACIMA */
+        data: function () {
+          return {
+            pagina: {
+              titulo: 'Teste',
+              slug: 'teste',
+              conteudo: 'Teste'
+            },
+            configuracoes: {
+              logotipo: 'logotipo.png',
+              cores: {
+                escuro: {
+                  primaria: true,
+                  secundaria: true,
+                  destaque: true,
+                },
+                cor: {
+                  primaria: '#3e455c',
+                  secundaria: '#212121',
+                  destaque: '#553e5c',
+                }
+              }
+            },
+            pagina: {
+              url: '/demonstracao',
+              titulo: 'Demonstração',
+              conteudo: 'Demonstração'
+            },
+            menus: [
+              {
+                nome: 'Principal',
+                menu: [
+                  {
+                    titulo: 'Item 1',
+                    url: '/item'
+                  },
+                  {
+                    titulo: 'Item 2',
+                    url: '/item'
+                  },
+                  {
+                    titulo: 'Item 3',
+                    url: '/item'
+                  },
+                  {
+                    titulo: 'Item 4',
+                    url: '/item'
+                  },
+                  {
+                    titulo: 'Item 5',
+                    url: '/item'
+                  },
+                  {
+                    titulo: 'Item 6',
+                    url: '/item'
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        /* NÃO ALTERE ABAIXO */
+        methods: {
+          exibirTitulo () {
+            return this.pagina.slug === 'inicio' || this.pagina.conteudo.includes('"modulo":"conteudo-visualizacao"')
+          }
+        },
+        computed: {
+          conteudoProcessado () {
+            return {
+              template: '<div>' + this.pagina.conteudo + '</div>'
+            }
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
